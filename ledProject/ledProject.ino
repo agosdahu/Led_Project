@@ -2,6 +2,7 @@ extern "C"{
    #include "led_handler.h"
    #include "switch_handler.h"
    #include "sos_led.h"
+   #include "binary_counter.h"
  }
 
  SW_STATUS_t sw = {RELEASED, RELEASED};
@@ -33,15 +34,23 @@ void loop() {
   {
 #ifdef AGOSDAHU
     sos_ledBlink();
+#endif
+
 #ifdef VEZSBAHU
+#endif
 
 #ifdef KURDBOHU
+#endif
 
 #ifdef DANIGEHU
+#endif
 
 #ifdef NAGYKAHU
+    binary_counter();
+#endif
 
 #ifdef NAGYANHU
+#endif
 
 #ifdef KISSKAHU
 

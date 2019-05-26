@@ -3,7 +3,8 @@ extern "C"{
    #include "switch_handler.h"
    #include "sos_led.h"
    #include "binary_counter.h"
- }
+   #include "chasingLights.h"
+}
 
  SW_STATUS_t sw = {RELEASED, RELEASED};
   
@@ -49,7 +50,8 @@ void loop() {
     binary_counter();
 #endif
 
-#ifdef NAGYANHU
+#ifdef NAGYARHU
+    ChasingLights();
 #endif
 
 #ifdef KISSKAHU

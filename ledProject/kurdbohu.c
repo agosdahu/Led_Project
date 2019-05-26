@@ -71,7 +71,7 @@ void kurdbohu_loop(void)
 
 static void switch_led_state(void)
 {
-    unsigned int i;
+    uint16_t i;
 
     // switch state
     led_state = (led_state == LOW ? HIGH : LOW);

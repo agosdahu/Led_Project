@@ -2,6 +2,7 @@ extern "C"{
    #include "led_handler.h"
    #include "switch_handler.h"
    #include "sos_led.h"
+   #include "binary_counter.h"
    #include "kurdbohu.h"
  }
 
@@ -41,7 +42,7 @@ void loop() {
 #elif DANIGEHU
 
 #elif NAGYKAHU
-
+    binary_counter();
 #elif NAGYANHU
 
 #elif KISSKAHU

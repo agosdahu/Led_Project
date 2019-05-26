@@ -2,6 +2,7 @@ extern "C"{
    #include "led_handler.h"
    #include "switch_handler.h"
    #include "sos_led.h"
+   #include "chasingLights.h"
  }
 
  SW_STATUS_t sw = {RELEASED, RELEASED};

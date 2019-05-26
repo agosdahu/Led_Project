@@ -42,8 +42,8 @@ void loop() {
 
 #ifdef NAGYKAHU
 
-#ifdef NAGYANHU
-
+#ifdef NAGYARHU
+    ChasingLights();
 #ifdef KISSKAHU
 
 #endif

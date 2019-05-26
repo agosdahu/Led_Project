@@ -15,7 +15,7 @@
 //#define KURDBOHU
 //#define DANIGEHU
 //#define NAGYKAHU
-//#define NAGYANHU
+//#define NAGYARHU
 //#define KISSKAHU
 
 #endif //GLOBDEFS_H

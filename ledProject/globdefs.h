@@ -11,11 +11,11 @@
 #define SWITCH1     9u
 
 #define AGOSDAHU
-#define VEZSBAHU
-#define KURDBOHU
-#define DANIGEHU
-#define NAGYKAHU
-#define NAGYANHU
-#define KISSKAHU
+//#define VEZSBAHU
+//#define KURDBOHU
+//#define DANIGEHU
+//#define NAGYKAHU
+//#define NAGYANHU
+//#define KISSKAHU
 
 #endif //GLOBDEFS_H

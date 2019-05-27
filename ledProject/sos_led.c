@@ -1,16 +1,12 @@
 #include "sos_led.h"
+#include "globdefs.h"
 #include <Arduino.h>
 
 #define SHORT 250u
 #define LONG  500u
 #define PAUSE 15000u
 
-const int led0  = 2;
-const int led1  = 3;
-const int led2  = 4;
-const int led3  = 5;
-const int led4  = 6;
-const int led5  = 7;
+void MorseBlink(int time);
 
 static FSM_t FSM_SOS        = S;
 
@@ -78,14 +74,14 @@ void sos_ledBlink(void)
 
 void MorseBlink(int time)
 {
-  digitalWrite(led0, HIGH);
-  digitalWrite(led1, HIGH);
-  digitalWrite(led4, HIGH);
-  digitalWrite(led5, HIGH);
+  digitalWrite(LED0, HIGH);
+  digitalWrite(LED1, HIGH);
+  digitalWrite(LED4, HIGH);
+  digitalWrite(LED5, HIGH);
   delay(time);
-  digitalWrite(led0, LOW);
-  digitalWrite(led1, LOW);
-  digitalWrite(led4, LOW);
-  digitalWrite(led5, LOW);
+  digitalWrite(LED0, LOW);
+  digitalWrite(LED1, LOW);
+  digitalWrite(LED4, LOW);
+  digitalWrite(LED5, LOW);
   delay(SHORT);
 }

@@ -4,8 +4,8 @@
 
 extern SW_STATUS_t sw;
 
-const int ledSum = 6;
-const int ledPins[] = { LED0, LED1, LED2, LED3, LED4, LED5 };
+static const int ledSum = 6;
+static const int ledPins[] = { LED0, LED1, LED2, LED3, LED4, LED5 };
 
 static int noOfChangedLed = 1;
 static int noOfLed = 0;

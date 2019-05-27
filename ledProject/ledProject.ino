@@ -4,6 +4,7 @@ extern "C"{
    #include "sos_led.h"
    #include "binary_counter.h"
    #include "chasingLights.h"
+   #include "railBarrier.h"
 }
 
  SW_STATUS_t sw = {RELEASED, RELEASED};
@@ -55,7 +56,7 @@ void loop() {
 #endif
 
 #ifdef KISSKAHU
-
+   railBarrier();
 #endif
   }
 }

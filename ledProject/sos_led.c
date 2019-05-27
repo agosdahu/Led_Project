@@ -1,5 +1,5 @@
 #include "sos_led.h"
-#include "globdefs"
+#include "globdefs.h"
 #include <Arduino.h>
 
 #define SHORT 250u

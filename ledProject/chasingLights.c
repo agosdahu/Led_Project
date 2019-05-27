@@ -69,8 +69,6 @@ void ChasingLights( )
 			}
 		}while(digitalRead( SWITCH1 ) != HIGH);
   
-		sw.sw1 = PRESSED;
-  
 		for (int noOfLed = 0; noOfLed < ledSum; noOfLed++)
 		{
 			digitalWrite( ledPins[noOfLed], LOW );

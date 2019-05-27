@@ -16,11 +16,12 @@
 #define LED_HIGH_TIME      200u
 #define LED_LOW_TIME_MIN   200u
 #define LED_LOW_TIME_MAX   1000u
-#define LED_LOW_TIME_STEP  50u
+#define LED_LOW_TIME_STEP  100u
 
 // --------------------------------------------------------- //
 // static functions
 
+static void change_low_time_act(void);
 static void switch_led_state(void);
 static void reset_counter(void);
 
@@ -53,16 +54,8 @@ void kurdbohu_loop(void)
     {
         if (elapsed_time > led_low_time_act)
         {
+            change_low_time_act();
             switch_led_state();
-        }
-        else
-        {
-            if (led_low_time_act > LED_LOW_TIME_MAX  ||
-                led_low_time_act < LED_LOW_TIME_MIN)
-            {
-                direction *= (-1);
-            }
-            led_low_time_act += direction * LED_LOW_TIME_STEP;
         }
     }
     
@@ -83,6 +76,16 @@ static void switch_led_state(void)
     }
 
     reset_counter();
+}
+
+static void change_low_time_act(void)
+{
+    if (led_low_time_act > LED_LOW_TIME_MAX  ||
+        led_low_time_act < LED_LOW_TIME_MIN)
+    {
+        direction *= (-1);
+    }
+    led_low_time_act += direction * LED_LOW_TIME_STEP;
 }
 
 static void reset_counter(void)

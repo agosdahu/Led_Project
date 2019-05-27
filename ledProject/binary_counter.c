@@ -3,7 +3,7 @@
 
 static void displayBinary(int numToShow);
 
-int ledPins[] = {LED5,LED4,LED3,LED2,LED1,LED0};
+static const int ledPins[] = {LED5,LED4,LED3,LED2,LED1,LED0};
 
 int counter = 0;
 

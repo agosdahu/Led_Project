@@ -6,6 +6,7 @@ extern "C"{
    #include "chasingLights.h"
    #include "LightRace.h"
    #include "railBarrier.h"
+   #include "kurdbohu.h"
 }
 
  SW_STATUS_t sw = {RELEASED, RELEASED};
@@ -43,6 +44,7 @@ void loop() {
 #endif
 
 #ifdef KURDBOHU
+     kurdbohu_loop();
 #endif
 
 #ifdef DANIGEHU

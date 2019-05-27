@@ -48,8 +48,7 @@ void loop() {
 #endif
 
 #ifdef DANIGEHU
-     /*TODO: uncomment when LightRace merge is complete. */
-     /* LightRace( 20000 ); */
+     LightRace( 20000 );
 #endif
 
 #ifdef NAGYKAHU

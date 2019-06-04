@@ -36,6 +36,9 @@ void loop() {
 
   if(EN)
   {
+
+    runProgram();
+
   //sos_ledBlink();
 //
   //kurdbohu_loop();

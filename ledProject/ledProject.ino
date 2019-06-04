@@ -36,31 +36,17 @@ void loop() {
 
   if(EN)
   {
-#ifdef AGOSDAHU
-    sos_ledBlink();
-#endif
+  //sos_ledBlink();
+//
+  //kurdbohu_loop();
+//
+  //LightRace( 20000 );
+//
+  //binary_counter();
+//
+  //ChasingLights();
+//
+  //railBarrier();
 
-#ifdef VEZSBAHU
-#endif
-
-#ifdef KURDBOHU
-     kurdbohu_loop();
-#endif
-
-#ifdef DANIGEHU
-    LightRace( 20000 );
-#endif
-
-#ifdef NAGYKAHU
-    binary_counter();
-#endif
-
-#ifdef NAGYARHU
-    ChasingLights();
-#endif
-
-#ifdef KISSKAHU
-   railBarrier();
-#endif
   }
 }

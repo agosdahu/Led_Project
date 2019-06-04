@@ -1,8 +1,9 @@
 #ifndef SWITCH_HANDLER_H
 #define SWITCH_HANDLER_H
 
-#include "Arduino.h"
-#include "globdefs.h"
+
+#define SWITCH0     8u
+#define SWITCH1     9u
 
 typedef enum SW_STATE{
     PRESSED = 0,

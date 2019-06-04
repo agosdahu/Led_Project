@@ -1,4 +1,5 @@
 #include "switch_handler.h"
+#include "Arduino.h"
 
 static int sw0State = 1;
 static int sw0_old = 1;

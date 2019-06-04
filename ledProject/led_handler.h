@@ -1,16 +1,18 @@
 #ifndef LED_HANDLER_H
 #define LED_HANDLER_H
 
-#include "driver.h"
+#define LED0        2u
+#define LED1        3u
+#define LED2        4u
+#define LED3        5u
+#define LED4        6u
+#define LED5        7u
 
 // global functions
-void   LedInit(void);
-void   SetLed(uint8_t pin);
-void   ClearLed(uint8_t pin);
-int8_t GetLedState(uint8_t pin);
-void   SetLedState(uint8_t pin, uint8_t state);
-void   SwitchLedState(uint8_t pin);
-
-
+void   Led_Init(void);
+void   Led_ON(uint8_t pin);
+void   Led_OFF(uint8_t pin);
+int    GetLedState(uint8_t pin);
+void Led_Reset();
 
 #endif //LED_HANDLER_H

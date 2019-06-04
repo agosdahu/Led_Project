@@ -1,5 +1,5 @@
 #include "sos_led.h"
-#include "globdefs.h"
+#include "driver.h"
 #include <Arduino.h>
 
 #define SHORT 250u
@@ -53,7 +53,7 @@ void sos_ledBlink(void)
       break;
 
       case P:
-        delay(1);
+        DelayMillis(1);
         delay_cnt++;
 
         if(!P_cnt)
@@ -74,14 +74,14 @@ void sos_ledBlink(void)
 
 void MorseBlink(int time)
 {
-  digitalWrite(LED0, HIGH);
-  digitalWrite(LED1, HIGH);
-  digitalWrite(LED4, HIGH);
-  digitalWrite(LED5, HIGH);
-  delay(time);
-  digitalWrite(LED0, LOW);
-  digitalWrite(LED1, LOW);
-  digitalWrite(LED4, LOW);
-  digitalWrite(LED5, LOW);
-  delay(SHORT);
+  Led_ON(LED0);
+  Led_ON(LED1);
+  Led_ON(LED4);
+  Led_ON(LED5);
+  DelayMillis(time);
+  Led_OFF(LED0);
+  Led_OFF(LED1);
+  Led_OFF(LED4);
+  Led_OFF(LED5);
+  DelayMillis(SHORT);
 }

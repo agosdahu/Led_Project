@@ -7,6 +7,7 @@
 // extern includes
 
 #include <Arduino.h>
+#include "driver.h"
 
 // --------------------------------------------------------- //
 // local definitions

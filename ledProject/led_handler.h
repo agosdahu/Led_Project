@@ -1,6 +1,8 @@
 #ifndef LED_HANDLER_H
 #define LED_HANDLER_H
 
+#include <stdint.h>
+
 #define LED0        2u
 #define LED1        3u
 #define LED2        4u

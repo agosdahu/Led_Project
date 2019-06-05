@@ -1,13 +1,14 @@
 extern "C"{
    #include "driver.h"
    #include "organise.h"
+   #include <stdint.h>
 }
 
  SW_STATUS_t sw = {{RELEASED, 0, 0}, {RELEASED, 0,0}};
   
 void setup() {
   
-  LedInit();
+  Led_Init();
   SwitchInit();
   SetCallback(0); //Idle
 }

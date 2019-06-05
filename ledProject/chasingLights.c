@@ -1,4 +1,5 @@
 #include "chasingLights.h"
+#include "driver.h"
 
 #define pinOflastLed ledPinArray[ledSum - 1]
 
@@ -49,7 +50,7 @@ void ChasingLights_TwoByTwo( )
 
 void ChasingLights( )
 {
-	if(sw.sw0 == PRESSED)
+	if(sw.sw0.state == PRESSED)
 	{
 		do
 		{

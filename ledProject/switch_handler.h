@@ -14,7 +14,9 @@ typedef enum SW_STATE{
 typedef struct SW_INFO{
     SW_STATE_t state;
     uint32_t lastPressed;           // timestamp of last pressing
+    uint32_t lastReleased;          // timestamp of last releasing
     uint32_t pressedDuration;       // measure PRESSED state duration in ms
+    uint32_t releasedDuration;      // measure RELEASED state duration in ms
 } SW_INFO_t;
 
 typedef struct SW_STATUS{

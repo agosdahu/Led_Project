@@ -10,9 +10,15 @@ typedef enum SW_STATE{
     RELEASED = 1
 } SW_STATE_t;
 
+typedef struct SW_INFO{
+    SW_STATE state;
+    uint32_t lastPressed;           // timestamp of last pressing
+    uint32_t pressedDuration;       // measure PRESSED state duration in ms
+} SW_INFO_t;
+
 typedef struct SW_STATUS{
-    SW_STATE_t sw0;
-    SW_STATE_t sw1;
+    SW_INFO_t sw0;
+    SW_INFO_t sw1;
 } SW_STATUS_t;
 
 void SwitchInit(void);

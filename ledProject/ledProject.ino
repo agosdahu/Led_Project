@@ -3,7 +3,7 @@ extern "C"{
    #include "organise.h"
 }
 
- SW_STATUS_t sw = {RELEASED, RELEASED};
+ SW_STATUS_t sw = {{RELEASED, 0, 0}, {RELEASED, 0,0}};
   
 void setup() {
   
@@ -19,12 +19,12 @@ void loop() {
   
   sw = ReadSwitchStatus();
 
-  if(sw.sw0 == PRESSED)
+  if(sw.sw0.state == PRESSED)
   {
     EN = 1;
   }
 
-  if(sw.sw1 == PRESSED)
+  if(sw.sw1.state == PRESSED)
   {
     EN = 0;
   }

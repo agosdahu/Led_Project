@@ -13,7 +13,6 @@ void binary_counter (void)
 {
    displayBinary(counter);
    DelayMillis(500);
-   //delay(500); 
    counter++;
    
    if (counter > 30)
@@ -29,11 +28,11 @@ static void displayBinary(int numToShow)
   {
     if (readBit(numToShow, i)==1)
     {
-      digitalWrite(ledPins[i], HIGH); 
+      Led_ON(ledPins[i]); 
     }
     else
     {
-      digitalWrite(ledPins[i], LOW); 
+      Led_OFF(ledPins[i]); 
     }
   }
 }

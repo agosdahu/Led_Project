@@ -16,7 +16,6 @@ void loop() {
   
   static int EN = 0;
   
-  
   sw = ReadSwitchStatus();
 
   if(sw.sw0.state == PRESSED)
@@ -97,4 +96,3 @@ bool detect_4(void)   // button 1 is pressed 2x within 500 ms (pressing a button
 
     return (targetAchieved);
 }
-

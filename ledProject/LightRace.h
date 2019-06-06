@@ -3,7 +3,7 @@
 
 #include "switch_handler.h"
 
-int LightRace( int runTime  );
+void LightRace( void  );
 
 
 

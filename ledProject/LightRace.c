@@ -28,21 +28,22 @@ void handleOnAndOffTimes( int timeIndicator );
 void SetStartAndStopTimesForACycleForSlowerCar( int baseTime, int delayTime );
 void SetStartAndStopTimesForACycleForFasterCar( int baseTime, int delayTime );
 
-int LightRace( int runTime )
+void LightRace( void )
 {
+  int runTime = 2000;
   ResetAllLed();
-  runTime = runTime + millis();
+  runTime = runTime + GetDiffTime();
 
   while(true)
   {
 
-    now = millis();
+    now = GetDiffTime();
   
-    if ( HIGH == digitalRead(SWITCH0) )
+    if ( 1 == GetLedState(SWITCH0) )
     {
       isOn = true;
     }
-    if ( HIGH == digitalRead(SWITCH1) )
+    if ( 1 == GetLedState(SWITCH1) )
     {
       isOn = false;
     }
@@ -64,7 +65,6 @@ int LightRace( int runTime )
     if ( runTime < now )
     {
        HandleProgramEnd();
-       return 0;
     }
   }
 }
@@ -78,12 +78,12 @@ void HandleProgramEnd()
 
 void TurnOffAllLed()
 {
-  digitalWrite( ledArray[0].pinNumber, LOW );
-  digitalWrite( ledArray[1].pinNumber, LOW );
-  digitalWrite( ledArray[2].pinNumber, LOW );
-  digitalWrite( ledArray[3].pinNumber, LOW );
-  digitalWrite( ledArray[4].pinNumber, LOW );
-  digitalWrite( ledArray[5].pinNumber, LOW );
+  Led_OFF( ledArray[0].pinNumber );
+  Led_OFF( ledArray[1].pinNumber );
+  Led_OFF( ledArray[2].pinNumber );
+  Led_OFF( ledArray[3].pinNumber );
+  Led_OFF( ledArray[4].pinNumber );
+  Led_OFF( ledArray[5].pinNumber );
 }
 
 void ResetAllLed()
@@ -109,10 +109,10 @@ void handleOnAndOffTimes( int timeIndicator )
 {
   for ( int l = 0; l < numberOfLeds; l++ )
   {
-    if ( timeIndicator == ledArray[l].onTime ) { digitalWrite( ledArray[l].pinNumber, HIGH ); }
-    if ( timeIndicator == ledArray[l].offTime ) { digitalWrite( ledArray[l].pinNumber, LOW ); }
-    if ( timeIndicator == ledArray[l].onTime2 ) { digitalWrite( ledArray[l].pinNumber, HIGH ); }
-    if ( timeIndicator == ledArray[l].offTime2 ) { digitalWrite( ledArray[l].pinNumber, LOW ); }
+    if ( timeIndicator == ledArray[l].onTime ) { Led_ON( ledArray[l].pinNumber); }
+    if ( timeIndicator == ledArray[l].offTime ) { Led_OFF( ledArray[l].pinNumber); }
+    if ( timeIndicator == ledArray[l].onTime2 ) { Led_ON( ledArray[l].pinNumber ); }
+    if ( timeIndicator == ledArray[l].offTime2 ) { Led_OFF( ledArray[l].pinNumber ); }
   }
 }
 

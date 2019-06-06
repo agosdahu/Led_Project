@@ -1,5 +1,4 @@
 #include "chasingLights.h"
-#include "driver.h"
 
 #define pinOflastLed ledPinArray[ledSum - 1]
 
@@ -13,44 +12,44 @@ static int noOfLed = 0;
 
 void ChasingLights_OneByOne( )
 {
-    digitalWrite( ledPinArray[noOfLed], HIGH );
-    delay( 200 );
-    digitalWrite( ledPinArray[noOfLed], LOW );
-
-	if (ledPinArray[noOfLed] == pinOflastLed)
-	{
-		noOfChangedLed = 2;
-	}
+    Led_ON( ledPinArray[noOfLed] );
+    DelayMillis( 200 );
+    Led_OFF( ledPinArray[noOfLed] );
+	
+    if (ledPinArray[noOfLed] == pinOflastLed)
+    {
+        noOfChangedLed = 2;
+    }
 }
 
 void ChasingLights_TwoByTwo( )
 {
-    digitalWrite( ledPinArray[noOfLed], HIGH );
+    Led_ON( ledPinArray[noOfLed] );
     if (ledPinArray[noOfLed] != pinOflastLed)
     {
-        digitalWrite( ledPinArray[noOfLed + 1], HIGH );
-	}
+        Led_ON( ledPinArray[noOfLed + 1] );
+    }
     else
     {
-        digitalWrite( ledPinArray[0], HIGH );
+        Led_ON( ledPinArray[0] );
     }
-    delay( 200 );
+    DelayMillis( 200 );
 
-    digitalWrite( ledPinArray[noOfLed], LOW );
+    Led_OFF( ledPinArray[noOfLed] );
     if (ledPinArray[noOfLed] != pinOflastLed)
     {
-        digitalWrite( ledPinArray[noOfLed + 1], LOW );
+        Led_OFF( ledPinArray[noOfLed + 1] );
     }
     else
     {
-        digitalWrite( ledPinArray[0], LOW );
-		noOfChangedLed = 1;
+        Led_OFF( ledPinArray[0] );
+	noOfChangedLed = 1;
     }
 }
 
 void ChasingLights( )
 {
-	if(sw.sw0.state == PRESSED)
+	if(sw.sw0.state != 1)
 	{
 		do
 		{
@@ -68,11 +67,11 @@ void ChasingLights( )
 			{
 				noOfLed = 0;
 			}
-		}while(digitalRead( SWITCH1 ) != HIGH);
+		}while(ReadSwitchStatus().sw1.state == 1);
   
 		for (int noOfLed = 0; noOfLed < ledSum; noOfLed++)
 		{
-			digitalWrite( ledPinArray[noOfLed], LOW );
+			Led_OFF( ledPinArray[noOfLed] );
 		}
 	
 		noOfChangedLed = 1;

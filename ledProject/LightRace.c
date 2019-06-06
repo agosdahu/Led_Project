@@ -1,4 +1,7 @@
 #include "LightRace.h"
+#include "driver.h"
+#include <stdbool.h>
+#include "Arduino.h"
 
 typedef struct 
 {

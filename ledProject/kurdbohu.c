@@ -6,8 +6,8 @@
 // --------------------------------------------------------- //
 // extern includes
 
-#include "Arduino.h"
-#include "globdefs.h"
+#include <Arduino.h>
+#include "driver.h"
 
 // --------------------------------------------------------- //
 // local definitions

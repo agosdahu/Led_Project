@@ -1,5 +1,5 @@
 #include "sos_led.h"
-#include "globdefs.h"
+#include "driver.h"
 #include <Arduino.h>
 
 #define SHORT 250u
@@ -18,70 +18,70 @@ static int delay_cnt        = 0;
 
 void sos_ledBlink(void)
 {
-    static int delayLimit = 0;
+  static int delayLimit = 0;
 
-    switch(FSM_SOS){
-      case S:
-        MorseBlink(SHORT);
-        iteration_cnt--;
-        if(iteration_cnt == 0)
+  switch (FSM_SOS) {
+    case S:
+      MorseBlink(SHORT);
+      iteration_cnt--;
+      if (iteration_cnt == 0)
+      {
+        S_cnt++;
+        S_cnt %= 3;   //S_cnt either 0, 1 or 2
+        if (S_cnt >= 2)
         {
-          S_cnt++;
-          S_cnt %= 3;   //S_cnt either 0, 1 or 2
-          if(S_cnt >= 2)
-          {
-              FSM_SOS = P;
-              S_cnt = 0;
-          }
-          else
-          {
-              FSM_SOS = O;
-          }
-
-          iteration_cnt = 3;
+          FSM_SOS = P;
+          S_cnt = 0;
         }
+        else
+        {
+          FSM_SOS = O;
+        }
+
+        iteration_cnt = 3;
+      }
       break;
 
-      case O:
-        MorseBlink(LONG);
-        iteration_cnt--;
-        if(iteration_cnt == 0)
-        {
-          FSM_SOS = S;
-          iteration_cnt = 3;
-        }
+    case O:
+      MorseBlink(LONG);
+      iteration_cnt--;
+      if (iteration_cnt == 0)
+      {
+        FSM_SOS = S;
+        iteration_cnt = 3;
+      }
       break;
 
-      case P:
-        delay(1);
-        delay_cnt++;
+    case P:
+      DelayMillis(1);
+      delay_cnt++;
 
-        if(!P_cnt)
-            delayLimit = 299;
-        else // P_cnt = 1
-            delayLimit = 14999;
+      if (!P_cnt)
+        delayLimit = 299;
+      else // P_cnt = 1
+        delayLimit = 14999;
 
-        if(delay_cnt >= delayLimit)
-        {
-            P_cnt++;
-            P_cnt %= 2; // P_cnt either 0 or 1
-            FSM_SOS = S;
-            delay_cnt = 0;
-        }
+      if (delay_cnt >= delayLimit)
+      {
+        P_cnt++;
+        P_cnt %= 2; // P_cnt either 0 or 1
+        FSM_SOS = S;
+        delay_cnt = 0;
+      }
       break;
-    }
+  }
 }
 
 void MorseBlink(int time)
 {
-  digitalWrite(LED0, HIGH);
-  digitalWrite(LED1, HIGH);
-  digitalWrite(LED4, HIGH);
-  digitalWrite(LED5, HIGH);
-  delay(time);
-  digitalWrite(LED0, LOW);
-  digitalWrite(LED1, LOW);
-  digitalWrite(LED4, LOW);
-  digitalWrite(LED5, LOW);
-  delay(SHORT);
+  Led_ON(LED0);
+  Led_ON(LED1);
+  Led_ON(LED4);
+  Led_ON(LED5);
+  DelayMillis(time);
+  Led_OFF(LED0);
+  Led_OFF(LED1);
+  Led_OFF(LED4);
+  Led_OFF(LED5);
+  DelayMillis(SHORT);
 }

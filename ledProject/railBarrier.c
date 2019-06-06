@@ -19,13 +19,13 @@ static void redLedsOff( );
 
 void railBarrier( )
 {
-    buttonOnState = digitalRead( SWITCH0 );
-    buttonOffState = digitalRead( SWITCH1 );
+    buttonOnState = GetLedState( SWITCH0 );
+    buttonOffState = GetLedState( SWITCH1 );
 
-    if (buttonOnState == HIGH) {
+    if (buttonOnState == 1) {
         isOnPressed = true;
     }
-    if (buttonOffState == HIGH) {
+    if (buttonOffState == 1) {
         isOnPressed = false;
         whiteLedsOff( );
         redLedsOff( );
@@ -36,9 +36,9 @@ void railBarrier( )
     if (whiteBlink && isOnPressed)
     {
         whiteLedsOff( );
-        delay( 500 );        // delay
+        DelayMillis( 500 );
         whiteLedsOn( );
-        delay( 500 );        // delay  
+        DelayMillis( 500 );
         counter++;
 
         if (counter == 10)
@@ -51,9 +51,9 @@ void railBarrier( )
     else if (isOnPressed)
     {
         redLedsOff( );
-        delay( 500 );        // delay
+        DelayMillis( 500 );    
         redLedsOn( );
-        delay( 500 );        // delay  
+        DelayMillis( 500 );    
         counter++;
 
         if (counter == 15)
@@ -67,28 +67,28 @@ void railBarrier( )
 
 static void whiteLedsOn( )
 {
-    digitalWrite( LED1, HIGH );
-    digitalWrite( LED2, HIGH );
-    digitalWrite( LED3, HIGH );
-    digitalWrite( LED4, HIGH );
+    Led_ON( LED1 );
+    Led_ON( LED2 );
+    Led_ON( LED3 );
+    Led_ON( LED4 );
 }
 
 static void whiteLedsOff( )
 {
-    digitalWrite( LED1, LOW );
-    digitalWrite( LED2, LOW );
-    digitalWrite( LED3, LOW );
-    digitalWrite( LED4, LOW );
+    Led_OFF( LED1 );
+    Led_OFF( LED2 );
+    Led_OFF( LED3 );
+    Led_OFF( LED4 );
 }
 
 static void redLedsOn( )
 {
-    digitalWrite( LED5, HIGH );
-    digitalWrite( LED0, HIGH );
+    Led_ON( LED5 );
+    Led_ON( LED0 );
 }
 
 static void redLedsOff( )
 {
-    digitalWrite( LED5, LOW );
-    digitalWrite( LED0, LOW );
+    Led_OFF( LED5 );
+    Led_OFF( LED0 );
 }

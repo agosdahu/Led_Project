@@ -17,83 +17,96 @@ Brief:
 
 void best_led_show_in_the_history_of_mankind( void )
 {
+  static char state_cnt = 0;
+  static char init_flag = NOT_INITED;
 
-  static STATE_HANDLER_STRUCT state_handler = { FIRST_STAGE , 0 };
+  static STATE_CONTAINER* state_array[ NUM_OF_STATES ] = {/* ... */};
+  static STATE_CONTAINER first_st = { SHORT_BLINK , INNER_CNT_INIT_VALUE , 2 };
+  static STATE_CONTAINER second_st = { LONG_BLINK , INNER_CNT_INIT_VALUE , 4 };
 
-  switch( state_handler.state )
+  if( NOT_INITED == init_flag )
   {
-    case FIRST_STAGE:
-      if( MY_TRUE == state_func( SHORT_BLINK , state_handler.main_cnt ) )
-      {
-        main_state_handler( 2 , &state_handler, SECOND_STAGE );
-      }
-      //'else' branch is void
-      break;
-      
-    case SECOND_STAGE: 
-      if( MY_TRUE == state_func( LONG_BLINK , state_handler.main_cnt ) ) 
-      {
-        main_state_handler( 4 , &state_handler, THIRD_STAGE );
-      }
-      //'else' branch is void
-      break;
-      
-    case THIRD_STAGE:
-      if( MY_TRUE == state_func( SHORT_BLINK , state_handler.main_cnt ) ) 
-      {
-        main_state_handler( 2 , &state_handler, FIRST_STAGE );
-      }
-      //'else' branch is void
-      break;
-      
-    default:    
-        /* Do nothing ... */
-      break;
-  } 
+    state_array[ 0 ] = &first_st;
+    state_array[ 1 ] = &second_st;
+  }
+
+  if( NUM_OF_STATES == state_cnt )
+  {
+    state_cnt == 0;
+  }
+  else
+  {
+    if( MY_TRUE == main_state_handler( state_array[ state_cnt ] ) )
+    {
+      state_cnt++;
+    }
+    else;  //Do nothing ...
+  }
   
+
 }
 
-void main_state_handler( int cnt , STATE_HANDLER_STRUCT *state_handler_p , STAGES_E next_state )
+char main_state_handler( STATE_CONTAINER* actual_state_container_p )
 {
-    if( ( 2 * cnt ) == state_handler_p->main_cnt )
-    {
-      state_handler_p->main_cnt = 0;
-      state_handler_p->state = next_state; 
-    }
-    else
-    {
-      state_handler_p->main_cnt++;
-    }
+  char return_value = MY_FALSE;
+
+  if( MY_TRUE == state_func( actual_state_container_p ) )
+  {
+    return_value = switch_main_state( actual_state_container_p );
+  }
+
+  return return_value;
 }
 
-char state_func( int t , char main_state_cnt )
+char switch_main_state( STATE_CONTAINER* actual_state_container_p )
+{
+  char return_value = MY_FALSE;
+  static char tmp_cnt = 0;
+
+  if( ( 2 * actual_state_container_p->how_many_times ) == actual_state_container_p->how_many_times_cnt )
+  {
+    actual_state_container_p->how_many_times_cnt = 0;
+    return_value = MY_TRUE;
+  }
+  else
+  {
+    actual_state_container_p->how_many_times_cnt++;
+  }
+
+  return return_value;
+}
+
+char state_func( STATE_CONTAINER* actual_state_container_p )
 {
   char return_value = MY_FALSE;
   static int inner_cnt = 0;
 
-  DelayMillis( 1 );
-
-  if( t == inner_cnt )
+  if( actual_state_container_p->how_long == inner_cnt )
   {
     inner_cnt = 0;
-    if( main_state_cnt % 2 )
-    {
-      turn_on_leds_1( );
-    }
-    else
-    {
-      turn_on_leds_2( );
-    }
-    return_value = MY_TRUE;
-
+    bvezsenyi_led_handler( actual_state_container_p );
   }
   else
   {
     inner_cnt++;
-  } 
+  }
+  
+  DelayMillis( 1 );
 
   return return_value;
   
+}
+
+void bvezsenyi_led_handler( STATE_CONTAINER* actual_state_container_p )
+{
+  if( actual_state_container_p->how_many_times_cnt % 2 )
+  {
+    turn_on_leds_1( );
+  }
+  else
+  {
+    turn_on_leds_2( );
+  }
 }
 
 void turn_on_leds_1( void )

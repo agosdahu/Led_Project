@@ -6,28 +6,36 @@
 
 #define SHORT_BLINK  250    // in milisec
 #define LONG_BLINK  500     // in milisec 
-#define NUM_OF_LEDS 3
 #define MY_TRUE 1
 #define MY_FALSE 0
+#define NUM_OF_STATES 3
+#define NOT_INITED  0
+#define INITED  1
+#define INNER_CNT_INIT_VALUE 0
 
-typedef enum stages_e
-{
-    FIRST_STAGE = 0,
-    SECOND_STAGE,
-    THIRD_STAGE
-    
-}STAGES_E;
 
-typedef struct state_handler_struct
+typedef struct main_conatiner
 {
-    char state;
-    char main_cnt;
-    
-}STATE_HANDLER_STRUCT;
+  int main_counter;
+  int main_state;
+  
+}MAIN_CONTAINER;
+  
+
+typedef struct state_container
+{  
+  char how_many_times;
+  char how_many_times_cnt;
+  int how_long;
+
+}STATE_CONTAINER;
+
 
 void best_led_show_in_the_history_of_mankind( void );
-void main_state_handler( int , STATE_HANDLER_STRUCT* , STAGES_E );
-char state_func( int , char );
+void main_state_handler( STATE_CONTAINER* );
+char switch_main_state( STATE_CONTAINER* )
+char state_func( STATE_CONTAINER* );
+void bvezsenyi_led_handler( STATE_CONTAINER* );
 void turn_on_leds_1( void );
 void turn_on_leds_2( void );
 #endif /* _BVEZSENYI_FUNC_H_ */

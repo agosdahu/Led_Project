@@ -1,55 +1,37 @@
 #include "bvezsenyi_func.h"
 
-/*
-Brief:
-  Within best_led_show_in_the_history_of_mankind() function there are 3 main states: 
-  1.) Short blinking -> see definition of SHORT_BLINK
-  2.) Long blinking -> see definition of LONG_BLINK 
-  3.) Short blinking -> see definition of SHORT_BLINK
-
-  state_func is responsible for timing in an almos non blocking way -> there is only 1 ms delay in it
-  There is an inner counter which increments in every ms. If inner counter reach the 
-  value of 't' ( first argument of state_func ), state_func returns with TRUE, and 
-  main state expection is runs. First argument of main_state_handler determines the cycles 
-  of the current state.  
-
-*/
-
 void best_led_show_in_the_history_of_mankind( void )
 {
   static char state_cnt = 0;
   static char init_flag = NOT_INITED;
 
   static STATE_CONTAINER* state_array[ NUM_OF_STATES ] = {/* ... */};
-  static STATE_CONTAINER first_st = { SHORT_BLINK , INNER_CNT_INIT_VALUE , 2 };
-  static STATE_CONTAINER second_st = { LONG_BLINK , INNER_CNT_INIT_VALUE , 4 };
+  static STATE_CONTAINER first_st = { 2 , 250 };
+  static STATE_CONTAINER second_st = { 4 , 500 };
 
   if( NOT_INITED == init_flag )
   {
     state_array[ 0 ] = &first_st;
     state_array[ 1 ] = &second_st;
+    init_flag = INITED;
   }
 
   if( NUM_OF_STATES == state_cnt )
   {
-    state_cnt == 0;
+    state_cnt = 0;
   }
-  else
-  {
-    if( MY_TRUE == main_state_handler( state_array[ state_cnt ] ) )
-    {
-      state_cnt++;
-    }
-    else;  //Do nothing ...
-  }
-  
 
+  if( MY_TRUE == main_state_handler( state_array[ state_cnt ] ) )
+  {
+    state_cnt++;
+  }
+  else;  //Do nothing ...
 }
 
 char main_state_handler( STATE_CONTAINER* actual_state_container_p )
 {
   char return_value = MY_FALSE;
-
+  
   if( MY_TRUE == state_func( actual_state_container_p ) )
   {
     return_value = switch_main_state( actual_state_container_p );
@@ -63,14 +45,14 @@ char switch_main_state( STATE_CONTAINER* actual_state_container_p )
   char return_value = MY_FALSE;
   static char tmp_cnt = 0;
 
-  if( ( 2 * actual_state_container_p->how_many_times ) == actual_state_container_p->how_many_times_cnt )
+  if( ( 2 * actual_state_container_p->how_many_times ) == tmp_cnt )
   {
-    actual_state_container_p->how_many_times_cnt = 0;
+    tmp_cnt = 0;
     return_value = MY_TRUE;
   }
   else
   {
-    actual_state_container_p->how_many_times_cnt++;
+    tmp_cnt++;
   }
 
   return return_value;
@@ -85,6 +67,7 @@ char state_func( STATE_CONTAINER* actual_state_container_p )
   {
     inner_cnt = 0;
     bvezsenyi_led_handler( actual_state_container_p );
+    return_value = MY_TRUE;
   }
   else
   {
@@ -99,7 +82,9 @@ char state_func( STATE_CONTAINER* actual_state_container_p )
 
 void bvezsenyi_led_handler( STATE_CONTAINER* actual_state_container_p )
 {
-  if( actual_state_container_p->how_many_times_cnt % 2 )
+  static char inner_led_state = 1;
+  
+  if( inner_led_state )
   {
     turn_on_leds_1( );
   }
@@ -107,6 +92,8 @@ void bvezsenyi_led_handler( STATE_CONTAINER* actual_state_container_p )
   {
     turn_on_leds_2( );
   }
+
+  inner_led_state ^= 1;
 }
 
 void turn_on_leds_1( void )

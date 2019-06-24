@@ -1,7 +1,7 @@
 #include "switch_handler.h"
 #include "Arduino.h"
 
-static int sw0State = RELEASED
+static int sw0State = RELEASED;
 static int sw1State = RELEASED;
 
 static SW_STATE_t EvalState (int actState);
@@ -25,7 +25,7 @@ SW_STATUS_t ReadSwitchStatus(void)
     return ret;
 }
 
-SW_STATE_t EvalState (int actState, int oldState)
+SW_STATE_t EvalState (int actState)
 {
     SW_STATE_t ret = RELEASED;
 

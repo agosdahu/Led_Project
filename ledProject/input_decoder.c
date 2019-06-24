@@ -101,18 +101,6 @@ fsm_sw_t TellMyNextState(fsm_sw_t prevState, bInput_t action)
             }
         break;
 
-        case A_LONG:
-            if(prevState == A || prevState == A_2){
-                ret = A_2;
-                holdTimer++;
-
-                if(holdTimer >= HOLD_LIMIT){
-                    ret = UPDATE;
-                    holdTimer = 0;
-                }
-            }
-        break;
-        
         case AB_SHORT:
             if(prevState == BUTTON_IDLE){
                 ret = AB;
@@ -125,18 +113,6 @@ fsm_sw_t TellMyNextState(fsm_sw_t prevState, bInput_t action)
             }
             if(prevState == BPAUSE){
                 ret = BB;
-            }
-        break;
-        
-        case B_LONG:
-            if(prevState == B || prevState == B_2){
-                ret = B_2;
-                holdTimer++;
-
-                if(holdTimer >= HOLD_LIMIT){
-                    ret = UPDATE;
-                    holdTimer = 0;
-                }
             }
         break;
         

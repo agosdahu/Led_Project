@@ -2,7 +2,7 @@
 
 #define pinOflastLed ledPinArray[ledSum - 1]
 
-extern SW_STATUS_t sw;
+SW_STATUS_t sw;
 
 static const int ledSum = 6;
 static const int ledPinArray[] = { LED0, LED1, LED2, LED3, LED4, LED5 };

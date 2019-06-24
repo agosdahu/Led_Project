@@ -24,3 +24,8 @@ int  GetDiffTime (void)
 
     return retElapsed;   // elapsed time since last reading
 }
+
+ulong_t GetSysTimeMsec ()
+{
+    return millis();
+}

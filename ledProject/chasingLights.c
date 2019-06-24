@@ -49,7 +49,7 @@ void ChasingLights_TwoByTwo( )
 
 void ChasingLights( )
 {
-	if(sw.sw0.state != 1)
+	if(sw.sw0 != 1)
 	{
 		do
 		{
@@ -67,7 +67,7 @@ void ChasingLights( )
 			{
 				noOfLed = 0;
 			}
-		}while(ReadSwitchStatus().sw1.state == 1);
+		}while(ReadSwitchStatus().sw1 == 1);
   
 		for (int noOfLed = 0; noOfLed < ledSum; noOfLed++)
 		{

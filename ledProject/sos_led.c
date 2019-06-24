@@ -1,6 +1,5 @@
 #include "sos_led.h"
 #include "driver.h"
-#include <Arduino.h>
 
 #define SHORT 250u
 #define LONG  500u

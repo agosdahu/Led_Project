@@ -10,7 +10,7 @@ void setup() {
   
   Led_Init();
   SwitchInit();
-  SetCallback(IDLE); //Idle
+  SetCallback(AGOSDAHU); //Idle
 }
 
 void loop() {

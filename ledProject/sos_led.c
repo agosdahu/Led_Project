@@ -5,7 +5,16 @@
 #define LONG  500u
 #define PAUSE 15000u
 
-void MorseBlink(int time);
+uint8_t MorseBlink(int time);
+void SetTimer(int time);
+int CheckIfTimerWentOff(void);
+
+/*##################################################*/
+/* TIMER VARS */
+static ulong_t prevTime   = 0;
+static ulong_t actTime    = 0;
+static int timerVal       = 0;
+/*##################################################*/
 
 static FSM_t FSM_SOS        = S;
 
@@ -21,33 +30,37 @@ void sos_ledBlink(void)
 
   switch (FSM_SOS) {
     case S:
-      MorseBlink(SHORT);
-      iteration_cnt--;
-      if (iteration_cnt == 0)
+      if(MorseBlink(SHORT))
       {
-        S_cnt++;
-        S_cnt %= 3;   //S_cnt either 0, 1 or 2
-        if (S_cnt >= 2)
+        iteration_cnt--;
+        if (iteration_cnt == 0)
         {
-          FSM_SOS = P;
-          S_cnt = 0;
-        }
-        else
-        {
-          FSM_SOS = O;
-        }
+          S_cnt++;
+          S_cnt %= 3;   //S_cnt either 0, 1 or 2
+          if (S_cnt >= 2)
+          {
+            FSM_SOS = P;
+            S_cnt = 0;
+          }
+          else
+          {
+            FSM_SOS = O;
+          }
 
-        iteration_cnt = 3;
+          iteration_cnt = 3;
+        }
       }
       break;
 
     case O:
-      MorseBlink(LONG);
-      iteration_cnt--;
-      if (iteration_cnt == 0)
+      if(MorseBlink(LONG))
       {
-        FSM_SOS = S;
-        iteration_cnt = 3;
+        iteration_cnt--;
+        if (iteration_cnt == 0)
+        {
+          FSM_SOS = S;
+          iteration_cnt = 3;
+        }
       }
       break;
 
@@ -71,16 +84,68 @@ void sos_ledBlink(void)
   }
 }
 
-void MorseBlink(int time)
+uint8_t MorseBlink(int time)
 {
-  Led_ON(LED0);
-  Led_ON(LED1);
-  Led_ON(LED4);
-  Led_ON(LED5);
-  DelayMillis(time);
-  Led_OFF(LED0);
-  Led_OFF(LED1);
-  Led_OFF(LED4);
-  Led_OFF(LED5);
-  DelayMillis(SHORT);
+  static BLINK_t blinkStatus = BLINK_ON;
+  uint8_t ret = 0;
+
+  switch (blinkStatus)
+  {
+  case BLINK_ON:
+    Led_ON(LED0);
+    Led_ON(LED1);
+    Led_ON(LED4);
+    Led_ON(LED5);
+    SetTimer(time);
+    blinkStatus = BLINK_WAIT;
+    break;
+
+  case BLINK_OFF:
+    Led_OFF(LED0);
+    Led_OFF(LED1);
+    Led_OFF(LED4);
+    Led_OFF(LED5);
+    SetTimer(SHORT);
+    blinkStatus = BLINK_FINISHED;
+    break;
+
+  case BLINK_WAIT:
+    if(CheckIfTimerWentOff()){
+      blinkStatus = BLINK_OFF;
+    }
+    break;
+
+  case BLINK_FINISHED:
+    if(CheckIfTimerWentOff()){
+      blinkStatus = BLINK_ON;         //resetting the state machine
+      ret = 1;                        //feedback for finishing the BLINK
+    }
+    break;
+
+  default:
+    blinkStatus = BLINK_ON;
+    break;
+  }
+  return ret;
+}
+
+void SetTimer(int time)
+{
+  timerVal = time;
+  prevTime = GetSysTimeMsec();
+}
+
+int CheckIfTimerWentOff(void)
+{
+  int ret = 0;
+  actTime = GetSysTimeMsec();
+  
+  if((actTime-prevTime) >= timerVal){
+    ret = 1;
+  }
+  else{
+    ret = 0;
+  }
+
+  return ret;
 }

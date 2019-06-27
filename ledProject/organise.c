@@ -18,7 +18,7 @@ static void (*RunFunc)(void) = NULL;
 
 void Idle()
 {
-    //Do nothing
+    Led_Reset();
 }
 
 void RunProgram()

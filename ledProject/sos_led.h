@@ -7,6 +7,13 @@ typedef enum FSM{
     P
   } FSM_t;
 
+typedef enum BLINKMATRIX{
+  BLINK_ON,
+  BLINK_OFF,
+  BLINK_WAIT,
+  BLINK_FINISHED
+} BLINK_t;
+
 void sos_ledBlink( void );
 
 #endif

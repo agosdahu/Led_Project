@@ -8,6 +8,13 @@
 static unsigned long   actual_time      = 0;
 static unsigned long   start_time       = 0;
 
+/*##################################################*/
+/* TIMER VARS */
+static ulong_t prevTime   = 0;
+static ulong_t actTime    = 0;
+static int timerVal       = 0;
+/*##################################################*/
+
 void DelayMillis(int millisec)
 {
     delay(millisec);
@@ -23,4 +30,30 @@ int  GetDiffTime (void)
     start_time = actual_time;
 
     return retElapsed;   // elapsed time since last reading
+}
+
+ulong_t GetSysTimeMsec ()
+{
+    return millis();
+}
+
+void SetTimer(int time)
+{
+  timerVal = time;
+  prevTime = GetSysTimeMsec();
+}
+
+int CheckIfTimerWentOff(void)
+{
+  int ret = 0;
+  actTime = GetSysTimeMsec();
+  
+  if((actTime-prevTime) >= timerVal){
+    ret = 1;
+  }
+  else{
+    ret = 0;
+  }
+
+  return ret;
 }

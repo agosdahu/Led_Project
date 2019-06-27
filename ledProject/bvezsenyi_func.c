@@ -80,7 +80,7 @@ char state_func( STATE_CONTAINER* actual_state_container_p )
   
 }
 
-void bvezsenyi_led_handler( STATE_CONTAINER* actual_state_container_p )
+void bvezsenyi_led_handler( void )
 {
   static char inner_led_state = 1;
   

@@ -1,7 +1,4 @@
 #include "led_handler.h"
-#include "Arduino.h"
-
-
 
 void Led_Init(void)
 {

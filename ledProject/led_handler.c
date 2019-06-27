@@ -1,7 +1,5 @@
 #include "led_handler.h"
 
-
-
 void Led_Init(void)
 {
     pinMode(LED0, OUTPUT);

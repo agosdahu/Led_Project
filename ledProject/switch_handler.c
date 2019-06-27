@@ -1,6 +1,5 @@
 #include "switch_handler.h"
 
-
 static int sw0State = RELEASED;
 static int sw1State = RELEASED;
 

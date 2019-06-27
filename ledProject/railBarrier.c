@@ -1,5 +1,4 @@
 #include "railBarrier.h"
-
 #include "driver.h"
 
 static int counter = 0;

@@ -1,7 +1,6 @@
 #include "binary_counter.h"
 #include "driver.h"
 
-
 static void displayBinary(int numToShow);
 static int readBit ( int numToShow, int bitWanted );
 

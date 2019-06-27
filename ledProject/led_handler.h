@@ -2,6 +2,7 @@
 #define LED_HANDLER_H
 
 #include <stdint.h>
+#include "stub_driver.h"
 
 #define LED0        2u
 #define LED1        3u

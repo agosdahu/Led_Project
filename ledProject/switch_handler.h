@@ -4,6 +4,7 @@
 #define SWITCH0     8u
 #define SWITCH1     9u
 
+#include "stub_driver.h"
 typedef enum SW_STATE{
     PRESSED = 0,
     RELEASED = 1,

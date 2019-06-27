@@ -1,6 +1,6 @@
 #include "binary_counter.h"
 #include "driver.h"
-#include <Arduino.h>
+
 
 static void displayBinary(int numToShow);
 static int readBit ( int numToShow, int bitWanted );

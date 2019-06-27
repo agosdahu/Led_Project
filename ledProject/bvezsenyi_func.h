@@ -2,7 +2,6 @@
 #define _BVEZSENYI_FUNC_H_
 
 #include "driver.h"
-#include "Arduino.h"
 
 #define MY_TRUE 1
 #define MY_FALSE 0

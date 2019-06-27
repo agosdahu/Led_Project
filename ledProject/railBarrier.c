@@ -1,5 +1,4 @@
 #include "railBarrier.h"
-#include <Arduino.h>
 #include "driver.h"
 
 static int counter = 0;

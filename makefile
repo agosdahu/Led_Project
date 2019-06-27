@@ -1,4 +1,4 @@
-CC=gcc
+CC=gcc -std=c99
 PATHC=./ledProject/
 CFLAGS=-I$(PATHC)
 SRC=$(wildcard $(PATHC)*.c)

@@ -6,18 +6,8 @@
 #define PAUSE 15000u
 
 uint8_t MorseBlink(int time);
-void SetTimer(int time);
-int CheckIfTimerWentOff(void);
-
-/*##################################################*/
-/* TIMER VARS */
-static ulong_t prevTime   = 0;
-static ulong_t actTime    = 0;
-static int timerVal       = 0;
-/*##################################################*/
 
 static FSM_t FSM_SOS        = S;
-
 static int repetition_cnt   = 0;
 static int S_cnt            = 0;
 static int P_cnt            = 0;
@@ -126,26 +116,5 @@ uint8_t MorseBlink(int time)
     blinkStatus = BLINK_ON;
     break;
   }
-  return ret;
-}
-
-void SetTimer(int time)
-{
-  timerVal = time;
-  prevTime = GetSysTimeMsec();
-}
-
-int CheckIfTimerWentOff(void)
-{
-  int ret = 0;
-  actTime = GetSysTimeMsec();
-  
-  if((actTime-prevTime) >= timerVal){
-    ret = 1;
-  }
-  else{
-    ret = 0;
-  }
-
   return ret;
 }

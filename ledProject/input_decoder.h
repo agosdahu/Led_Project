@@ -27,33 +27,24 @@ typedef enum INPUT_OPTS {
     MAX_BINPUTS     //4
 } bInput_t;
 
+typedef struct  PATTERN{
+    bInput_t chara;
+    int charaCnt;
+    int isDuplicate;
+    int isInvalid;
+    ulong_t lastPressed;
+} pattern_t;
+
 /*
-1 - A
-2 - A -> A
-3 - AB
-4 - B
-5 - B -> B
-6 - A (2sec)
-7 - B (2sec)
+1 - A           AGOSDAHU
+2 - A -> A      DANIGEHU
+3 - AB          KISSKAHU
+4 - B           KURDBOHU
+5 - B -> B      NAGYARHU
+6 - A (2sec)    NAGYKAHU
+7 - B (2sec)    VEZSEBAHU
 OFF -> AB (2sec)
 */
-
-typedef enum FSM_SW {
-    A,
-    AA,
-    AB,
-    B,
-    BB,
-    A_2,
-    B_2,
-    APAUSE,
-    BPAUSE,
-    ERR,
-    myEOF,
-    UPDATE,
-    BUTTON_IDLE,
-    ST_MAX
-} fsm_sw_t;
 
 decodeRet_t DecodeInput(void);
 

@@ -1,11 +1,12 @@
 #include "driver.h"
 #include "input_decoder.h"
 
-#define myEOF_LIMIT   3u
-#define HOLD_LIMIT  8u
+#define MAX_FIFO_SIZE   12u
+#define SAMPLE2SEC      8u
+#define TIMEOUT         2000u
+#define HOLDSAMPLES     6u      //~1,5sec
 
 static const int samplePeriod = 250;
-
 static const bInput_t buttonMatrix[MAX_SWSTATES][MAX_SWSTATES] =
     {   
         {AB_SHORT,  B_SHORT},
@@ -14,9 +15,7 @@ static const bInput_t buttonMatrix[MAX_SWSTATES][MAX_SWSTATES] =
 
 static uint8_t TriggerSampling(void);
 static decodeRet_t StateMachine(SW_STATUS_t swState);
-fsm_sw_t TellMyNextState(fsm_sw_t prevState, bInput_t action);
-decodeRet_t TakeTheNextStep(fsm_sw_t doIt);
-bInput_t easyBRead(SW_STATUS_t readVal);
+bInput_t EasyBRead(SW_STATUS_t readVal);
 
 /* Sets the function pointer according to StateMachine, returns enable level and func Index */
 decodeRet_t DecodeInput(void) 
@@ -27,10 +26,10 @@ decodeRet_t DecodeInput(void)
 
     sampleTick = TriggerSampling();
 
-    if(sampleTick)
+    if(sampleTick)      //runs every 250msec if samplePeriod is 250
     {
         mySwitch = ReadSwitchStatus();
-        ret = StateMachine(mySwitch);
+        ret = StateMachine(mySwitch);       //MAGIC
     }
 
     return ret;
@@ -56,174 +55,131 @@ uint8_t TriggerSampling(void)
 
 decodeRet_t StateMachine(SW_STATUS_t swState)
 {
-    static fsm_sw_t decodeState     = BUTTON_IDLE;
-    decodeRet_t ret                 = {IDLE, 0};
-    bInput_t actInput               = AB_NOP;
+    static pattern_t myPattern          = {AB_NOP, 0, 0, 1, 0};
+    static bInput_t prevVal             = AB_NOP;
+    static decodeRet_t ret              = {IDLE, 0};
 
-    actInput = easyBRead(swState);
+    bInput_t actVal                     = AB_NOP;
 
-    /* TEST */
-    if(actInput == A_SHORT)
-        Led_ON(LED2);
-    if(actInput == B_SHORT)
-        Led_OFF(LED2);
+    ulong_t actSysTime;
 
-    if(actInput == AB_SHORT)
-        Led_ON(LED3);
-    if(actInput == AB_NOP)
-        Led_OFF(LED3);
-    /*       */
+    /*###   proper logic starts here ###*/
+    actVal = EasyBRead(swState);
+    actSysTime = GetSysTimeMsec();
 
-    decodeState = TellMyNextState(decodeState, actInput);
-    ret = TakeTheNextStep(decodeState);
-    if(decodeState == ERR){
-        decodeState == BUTTON_IDLE;
+    if(actVal != AB_NOP && prevVal == AB_NOP)
+    {
+        if(CheckIfTimerWentOff())
+        {
+            SetTimer(TIMEOUT);
+            myPattern.isInvalid = 0;
+        }
+
+        if((actSysTime - myPattern.lastPressed) >=  TIMEOUT)
+        {
+            myPattern.lastPressed = actSysTime;
+        }
+        else
+        {
+            if(myPattern.chara == actVal)
+            {
+                myPattern.isDuplicate = 1;
+            }
+            else
+            {
+                myPattern.isInvalid = 1;
+            }
+        }
+        
+        myPattern.chara = actVal;
     }
+    else if(actVal == prevVal)
+    {
+        if(actVal != AB_NOP)
+        {
+            myPattern.charaCnt++;
+        }
+    }
+        
+    if(CheckIfTimerWentOff())
+    {   
+        if(myPattern.isInvalid == 0)
+        {
+            switch (myPattern.chara)
+            {
+            case A_SHORT:
+                if(myPattern.charaCnt <= HOLDSAMPLES ) 
+                {
+                    if(myPattern.isDuplicate)   // A_SHORT x2 ormore
+                    {
+                        ret.fIndex = DANIGEHU;
+                    }
+                    else    //A_SHORT
+                    {
+                        ret.fIndex = AGOSDAHU;
+                    }
+                }
+                else    //A_LONG
+                {
+                    ret.fIndex = NAGYKAHU;
+                }
+                break;
+
+            case B_SHORT:
+                if(myPattern.charaCnt <= HOLDSAMPLES )
+                {
+                    if(myPattern.isDuplicate)   // B_SHORT x2 ormore
+                    {
+                        ret.fIndex = NAGYARHU;
+                    }
+                    else    //B_SHORT
+                    {
+                        ret.fIndex = KURDBOHU;
+                    }
+                }
+                else    //B_LONG
+                {
+                    ret.fIndex = VEZSEBAHU;
+                }
+                break;
+
+            case AB_SHORT:
+                if(myPattern.charaCnt <= HOLDSAMPLES ) // AB_SHORT
+                {
+                    ret.fIndex = KISSKAHU;
+                }
+                else // LONGPRESS -> OFF
+                {
+                    ret.fIndex = IDLE;
+                }
+                break;
+            
+            default:
+                ret.fIndex = IDLE;
+                break;
+            }
+            ret.fUpdate = UPDATE_YES;
+        }
+        else
+        {
+            ret.fUpdate = UPDATE_NO;
+        }
+        
+
+        myPattern.chara         = AB_NOP;
+        myPattern.charaCnt      = 0;
+        myPattern.isDuplicate   = 0;
+        myPattern.isInvalid     = 1;
+        myPattern.lastPressed   = 0;
+    }
+    
+    prevVal = actVal;
     
     return ret;    
 }
 
-/* next state based on previous state and button push */
-fsm_sw_t TellMyNextState(fsm_sw_t prevState, bInput_t action)
-{
-    fsm_sw_t ret = ERR;
-    static int myEOFTimer  = 0;
-    static int holdTimer = 0;   // samplePeriod = 250 -> 2sec needs 8 of these
-
-    switch(action)
-    {
-        case A_SHORT:
-            if(prevState == BUTTON_IDLE){
-                ret = A;
-            }
-            if(prevState == APAUSE){
-                ret = AA;
-            }
-        break;
-
-        case AB_SHORT:
-            if(prevState == BUTTON_IDLE){
-                ret = AB;
-            }
-        break;
-
-        case B_SHORT:
-            if(prevState == BUTTON_IDLE){
-                ret = B;
-            }
-            if(prevState == BPAUSE){
-                ret = BB;
-            }
-        break;
-        
-        case AB_NOP:
-            if(prevState == A){
-                ret = APAUSE;
-            }
-            if(prevState == B){
-                ret = BPAUSE;
-            }
-
-            if( prevState == AA     || 
-                prevState == BB     ||
-                prevState == AB     ||
-                prevState == APAUSE ||
-                prevState == BPAUSE ||
-                prevState == myEOF        )
-            {
-                ret = myEOF;
-                myEOFTimer++;
-
-                if(myEOFTimer >= myEOF_LIMIT){
-                    ret = UPDATE;
-                    myEOFTimer = 0;
-                }
-            }
-
-            if(prevState == BUTTON_IDLE){
-                ret = BUTTON_IDLE;
-            }
-
-        break;
-
-        if(prevState == ERR || prevState == UPDATE){
-            ret = BUTTON_IDLE;
-        }
-
-        default:
-            ret = ERR;
-        break;
-    }
-
-    return ret;
-}
-
-/* act on the current state */
-decodeRet_t TakeTheNextStep(fsm_sw_t doIt)
-{
-    static decodeRet_t ret = {IDLE, 0}; 
-
-    switch(doIt){
-        case A:
-            ret.fIndex = AGOSDAHU;
-        break;
-
-        case AA:
-            ret.fIndex = DANIGEHU;
-        break;
-
-        case AB:
-            ret.fIndex = KISSKAHU;
-        break;
-
-        case B:
-            ret.fIndex = KURDBOHU;
-        break;
-
-        case BB:
-            ret.fIndex = NAGYARHU;
-        break;
-
-        case A_2:
-            ret.fIndex = NAGYKAHU;
-        break;
-
-        case B_2:
-            ret.fIndex = VEZSEBAHU;
-        break;
-
-        case APAUSE:
-        break;
-
-        case BPAUSE:
-        break;
-
-        case ERR:
-            ret.fIndex = IDLE;
-            ret.fUpdate = 1;
-        break;
-
-        case myEOF:
-        break;
-
-        case UPDATE:
-            ret.fUpdate = 1;
-        break;
-
-        case BUTTON_IDLE:
-            ret.fUpdate = 0;
-
-        break;
-
-        default:
-            ret.fIndex = IDLE;
-            ret.fUpdate = 1;
-        break;
-    }   
-}
-
 /* Interprets the switch states and returns a predefined value */
-bInput_t easyBRead(SW_STATUS_t readVal)
+bInput_t EasyBRead(SW_STATUS_t readVal)
 {
     bInput_t ret = AB_NOP;
     

@@ -1,5 +1,4 @@
 #include "customDelay.h"
-#include "Arduino.h"
 
 //from Arduino documentation of millis():
 //"Number of milliseconds passed since the program started.

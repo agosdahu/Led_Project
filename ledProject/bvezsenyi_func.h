@@ -21,7 +21,7 @@ void best_led_show_in_the_history_of_mankind( void );
 char main_state_handler( STATE_CONTAINER* );
 char switch_main_state( STATE_CONTAINER* );
 char state_func( STATE_CONTAINER* );
-void bvezsenyi_led_handler( STATE_CONTAINER* );
+void bvezsenyi_led_handler( void );
 void turn_on_leds_1( void );
 void turn_on_leds_2( void );
 

@@ -7,6 +7,7 @@
 #include "LightRace.h"
 #include "railBarrier.h"
 #include "kurdbohu.h"
+#include "bvezsenyi_func.h"
 
 typedef enum FUNC_INDICE {
     IDLE,       //0

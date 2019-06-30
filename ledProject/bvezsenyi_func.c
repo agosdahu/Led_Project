@@ -66,7 +66,7 @@ char state_func( STATE_CONTAINER* actual_state_container_p )
   if( actual_state_container_p->how_long == inner_cnt )
   {
     inner_cnt = 0;
-    bvezsenyi_led_handler( actual_state_container_p );
+    bvezsenyi_led_handler();
     return_value = MY_TRUE;
   }
   else
